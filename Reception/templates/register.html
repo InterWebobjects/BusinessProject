@@ -1,0 +1,107 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block title %}Register{% endblock %}
+{% block content %}
+    <!--start-breadcrumbs-->
+    <div class="breadcrumbs">
+        <div class="container">
+            <div class="breadcrumbs-main">
+                <ol class="breadcrumb">
+                    <li><a href="index.html">Home</a></li>
+                    <li class="active">Register</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+    <!--end-breadcrumbs-->
+    <!--register-starts-->
+    <div class="register">
+        <div class="container">
+            <div class="register-top heading">
+                <h2>REGISTER</h2>
+            </div>
+            <form method="post" action="/user/1/?action=register">
+                <div class="register-main">
+                    <div class="col-md-6 account-left">
+                        <input placeholder="First name" type="text" name="first_name" tabindex="1" required>
+                        <input placeholder="Last name" type="text" name="last_name" tabindex="2" required>
+                        <input placeholder="Email address" type="text" name="email" tabindex="3" required>
+                        <span id="email_check"></span>
+                        <input placeholder="Mobile" type="text" name="mobile" tabindex="3" required>
+                        <ul>
+                            <li>
+                                <label class="radio left">
+                                    <input type="radio" name="gender" checked="checked" value="1"><i></i>Male
+                                </label>
+                            </li>
+                            <li>
+                                <label class="radio"><input type="radio" name="gender" value="0"><i></i>Female
+                                </label>
+                            </li>
+                            <div class="clearfix"></div>
+                        </ul>
+                    </div>
+                    <div class="col-md-6 account-left">
+                        <input placeholder="Password" type="password" name="password" tabindex="4" required>
+                        <span id="password_blank"></span>
+                        <input placeholder="Retype password" type="password" name="repassword" tabindex="4" required>
+                        <span id="password_check"></span>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </form>
+            <div class="address submit">
+                <input type="submit" value="Submit">
+            </div>
+        </div>
+    </div>
+    <!--register-end-->
+    <script>
+        $("[name='email']").blur(function () {
+            $.post('http://127.0.0.1:8000/user/1/?action=check_email', {'email': this.value}, function (data) {
+                if (data.code == 1) {
+                    $("#email_check").html("<span style='color: green;'>" + data.msg + "</span>");
+                } else {
+                    $("#email_check").html("<span style='color: red;'>" + data.msg + "</span>");
+                }
+            })
+        });
+
+        $("[name='password']").blur(function () {
+            $("#password_blank").html("");
+            if (!document.getElementsByName('password')[0].value) {
+                $("#password_blank").html("<span style='color: red;'>Empty.</span>");
+            }
+        });
+
+        $("[name='repassword']").blur(function () {
+            var password = document.getElementsByName('password')[0].value;
+            $.post('http://127.0.0.1:8000/user/1/?action=check_password',
+                {
+                    'password': password,
+                    'repassword': this.value
+                }, function (data) {
+                    if (data.code == 1 && password) {
+                        $("#password_check").html("<span style='color: green;'>" + data.msg + "</span>");
+                    } else {
+                        if (data.code == 0) {
+                            $("#password_check").html("<span style='color: red;'>" + data.msg + "</span>");
+                        }
+
+                    }
+                })
+        });
+        $("[type='submit']").click(function () {
+            data = $('form').serialize();
+            $.post("/user/1/?action=register", data, function (params) {
+                if (params.code == 1) {
+                    window.location.href = 'http://127.0.0.1:8000/account/';
+                } else {
+                    alert(params.msg);
+                }
+
+            })
+
+        })
+    </script>
+{% endblock %}
