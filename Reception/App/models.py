@@ -62,13 +62,15 @@ class Commodity(models.Model):
     picture_3 = models.CharField(max_length=256)
     tag = models.CharField(max_length=16)
     sku = models.CharField(max_length=32)
-    description = models.CharField(max_length=128)
-    plate = models.CharField(max_length=128)
-    case = models.CharField(max_length=128)
-    gem = models.CharField(max_length=128)
-    strap = models.CharField(max_length=128)
+    description = models.CharField(max_length=128, null=True)
+    plate = models.CharField(max_length=128, null=True)
+    case = models.CharField(max_length=128, null=True)
+    gem = models.CharField(max_length=128, null=True)
+    strap = models.CharField(max_length=128, null=True)
     price = models.CharField(max_length=16)
     sid = models.ForeignKey(Style, models.CASCADE, db_column='sid', blank=True, null=True)
+    is_delete = models.IntegerField(default=0)
+    watch = models.CharField(max_length=128, null=True)
 
     class Meta:
         managed = True
@@ -91,6 +93,7 @@ class Order(models.Model):
     send_time = models.DateTimeField(blank=True, null=True)
     uid = models.ForeignKey(User, models.CASCADE, db_column='uid', blank=True, null=True)
     cid = models.ForeignKey(Commodity, models.CASCADE, db_column='cid', blank=True, null=True)
+    is_delete = models.IntegerField(default=0)
 
     class Meta:
         managed = True

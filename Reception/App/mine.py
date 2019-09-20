@@ -4,8 +4,8 @@ from rest_framework.exceptions import APIException
 from rest_framework.generics import RetrieveAPIView
 from rest_framework.response import Response
 
-from App.models import User
-from App.serializer import UserSerializer
+from App.models import User, Cart
+from App.serializer import UserSerializer, CartSerializer
 from tools.mytoken import Token
 
 
@@ -18,6 +18,7 @@ class UserAPIView(RetrieveAPIView):
 
     def process(self, request, *args, **kwargs):
         action = request.query_params.get('action')
+        print(action)
         if hasattr(self, action):
             func = getattr(self, action)
         else:
@@ -88,3 +89,43 @@ class UserAPIView(RetrieveAPIView):
                 'code': 1,
                 'msg': 'Fine.'
             })
+
+
+class CartAPIView(RetrieveAPIView):
+    queryset = Cart
+    serializer_class = CartSerializer
+
+    def post(self, request, *args, **kwargs):
+        print('post')
+        return self.process(request, *args, **kwargs)
+
+    def process(self, request, *args, **kwargs):
+        action = request.query_params.get('action')
+        print(action)
+        if hasattr(self, action):
+            func = getattr(self, action)
+        else:
+            raise APIException('请求错误')
+        return func(request, *args, **kwargs)
+
+    def empty_cart(self, request, *args, **kwargs):
+        try:
+            cartList = Cart.objects.filter(uid=request.user.uid)
+            for commodity in cartList:
+                commodity.delete()
+
+            return Response({
+                'code': 1,
+                'msg': 'Deleted.'
+            })
+        except:
+            return Response({
+                'code': 0,
+                'msg': 'Failed.'
+            })
+
+    def addToCart(self, request, *args, **kwargs):
+        print(args)
+        return Response({
+            'msg': '111'
+        })

@@ -1,9 +1,11 @@
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.shortcuts import render, redirect
 
 # Create your views here.
+from django.urls import reverse
+
 from App.models import *
 
 
@@ -11,19 +13,27 @@ def styleList():
     styleMan = Style.objects.filter(Q(sid__lt=4) | Q(sid=6) | Q(sid=7))
     styleWomen = Style.objects.filter(sid__lt=6)
     styleClassic = Style.objects.filter(sid__gt=7)
-    return styleMan, styleWomen, styleClassic
+    styleAll = Style.objects.all()
+    return styleMan, styleWomen, styleClassic, styleAll
 
 
 def index(request):
-    style = styleList()
+    styles = styleList()
+    aboutList = Commodity.objects.order_by('-id')[0:3]
+    productList = Commodity.objects.order_by('-id')[3:11]
+
     return render(request, 'index.html', locals())
 
 
 def product(request, sid, tag=2):
+    sid = int(sid)
+    tag = int(tag)
     if tag != 2:
-        productList = Commodity.objects.filter(sid=int(sid), tag=int(tag))
-    style = styleList()
-    return render(request, 'products.html')
+        productList = Commodity.objects.filter(sid=sid, tag=tag)
+    else:
+        productList = Commodity.objects.filter(sid=sid)
+    styles = styleList()
+    return render(request, 'products.html', locals())
 
 
 def account(request):
@@ -35,23 +45,32 @@ def account(request):
         user = User.check_login(email=email, password=password)
         if user:
             login(request, user)
-            if next != 'None':
+            if next == 'None':
+                return redirect(reverse('app:index'))
+            else:
                 return redirect(next)
     return render(request, 'account.html', locals())
 
 
 def register(request):
-    return render(request, 'register.html')
+    styles = styleList()
+    return render(request, 'register.html', locals())
 
 
 @login_required
 def cart(request):
-    return render(request, 'checkout.html')
+    cartList = Cart.objects.filter(uid=request.user.uid)
+    styles = styleList()
+    return render(request, 'checkout.html', locals())
 
 
-def logout(request):
-    return render(request, 'single.html')
+def user_logout(request):
+    logout(request)
+    return redirect(reverse('app:index'))
 
 
-def single(request):
-    return render(request, 'single.html')
+def single(request, cid):
+    commodity = Commodity.objects.get(id=int(cid))
+    recommendList = Commodity.objects.order_by('-id')[0:3]
+    styles = styleList()
+    return render(request, 'single.html', locals())
