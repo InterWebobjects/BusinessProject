@@ -1,0 +1,108 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block title %}Accounts{% endblock %}
+{% block content %}
+    <!--start-breadcrumbs-->
+    <div class="breadcrumbs">
+        <div class="container">
+            <div class="breadcrumbs-main">
+                <ol class="breadcrumb">
+                    <li><a href="index.html">Home</a></li>
+                    <li class="active">Accounts</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+    <!--end-breadcrumbs-->
+    <!--start-ckeckout-->
+    <div class="ckeckout">
+        <div class="container">
+            <div class="ckeck-top heading">
+                <h2>ACCOUNTS</h2>
+            </div>
+            <div class="ckeckout-top">
+                <form method="post" action="{% url 'app:pay' %}">
+                    {% csrf_token %}
+                    <div class="cart-items">
+                        <h3>New Accounts ({{ styles.4.count }})</h3>
+                        <script>$(document).ready(function (c) {
+                            $('.close1').on('click', function (c) {
+                                $('.cart-header').fadeOut('slow', function (c) {
+                                    $('.cart-header').remove();
+                                });
+                            });
+                        });
+                        </script>
+                        <script>$(document).ready(function (c) {
+                            $('.close2').on('click', function (c) {
+                                $('.cart-header1').fadeOut('slow', function (c) {
+                                    $('.cart-header1').remove();
+                                });
+                            });
+                        });
+                        </script>
+                        <script>$(document).ready(function (c) {
+                            $('.close3').on('click', function (c) {
+                                $('.cart-header2').fadeOut('slow', function (c) {
+                                    $('.cart-header2').remove();
+                                });
+                            });
+                        });
+                        </script>
+
+                        <div class="in-check">
+                            <ul class="unit">
+                                <li><span>Item</span></li>
+                                <li><span>Product Name</span></li>
+                                <li><span>Unit Price / Amount</span></li>
+                                <li><span>Subtotal / Delivery Details</span></li>
+                                <li></li>
+                                <div class="clearfix"></div>
+                            </ul>
+                            {% for commodity in styles.4 %}
+                                <input type="hidden" name="cid" value="{{ commodity.product.id }}">
+                                <ul class="cart-header">
+                                    <a href="{% url 'app:removeitem' cid=commodity.product.id %}">
+                                        <div></div>
+                                    </a>
+                                    <li class="ring-in">
+                                        <a href="{% url 'app:single' cid=commodity.product.id %}">
+                                            <img src="/static/upload/{{ commodity.product.picture_1 }}"
+                                                 class="img-responsive"
+                                                 alt="{{ commodity.product.cname }}" style="width: 100px;">
+                                        </a>
+                                    </li>
+                                    <li><span class="name">{{ commodity.product.sku }}</span></li>
+                                    <li>
+                                    <span class="cost">
+                                    $ {{ commodity.product.price }} / {{ commodity.quantity }}
+                                    </span>
+                                        <input type="hidden" name="quantity{{ commodity.product.id }}"
+                                               value="{{ commodity.quantity }}">
+                                    </li>
+                                    <li><span>$ {{ commodity.total_price }} / Free</span>
+                                        <p></p></li>
+                                    <div class="clearfix"></div>
+                                </ul>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="register-main">
+                        <div class="col-md-6 account-left">
+                            <input placeholder="Who will receive the goods" type="text" name="receiver"
+                                   tabindex="1" value="{{ user.first_name }}.{{ user.last_name }}" required>
+                            <input placeholder="Address" type="text" name="address" tabindex="2" required>
+                            <input placeholder="Mobile" type="text" name="mobile" tabindex="3" required>
+                            <span class="name">Summary:</span> &nbsp;&nbsp
+                            <span class="cost">${{ styles.4.summary }}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <input type="text" name="summary" value="{{ styles.4.summary }}" style="display: none">
+                            <input type="submit" value="GO TO PAY"
+                                   style="font-size: 17px;background-color: black;color: white;border: black;height: 35px;width: 170px;">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!--end-ckeckout-->
+{% endblock %}

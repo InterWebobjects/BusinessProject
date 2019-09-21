@@ -1,7 +1,7 @@
 from django.contrib.auth.hashers import make_password
 from rest_framework import serializers
 
-from App.models import User, Cart
+from App.models import User
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -14,8 +14,3 @@ class UserSerializer(serializers.ModelSerializer):
         super().update(instance, validated_data)
         return instance
 
-
-class CartSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Cart
-        fields = ['count']

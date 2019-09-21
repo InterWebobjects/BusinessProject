@@ -1,0 +1,110 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block title %}Checkout{% endblock %}
+{% block content %}
+    <!--start-breadcrumbs-->
+    <div class="breadcrumbs">
+        <div class="container">
+            <div class="breadcrumbs-main">
+                <ol class="breadcrumb">
+                    <li><a href="index.html">Home</a></li>
+                    <li class="active">Order forms</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+    <!--end-breadcrumbs-->
+    <!--start-ckeckout-->
+    <div class="ckeckout">
+        <div class="container">
+            <div class="ckeck-top heading">
+                <h2>ORDER FORMS</h2>
+            </div>
+            <div class="ckeckout-top">
+                <div class="cart-items">
+
+                    <script>$(document).ready(function (c) {
+                        $('.close1').on('click', function (c) {
+                            $('.cart-header').fadeOut('slow', function (c) {
+                                $('.cart-header').remove();
+                            });
+                        });
+                    });
+                    </script>
+                    <script>$(document).ready(function (c) {
+                        $('.close2').on('click', function (c) {
+                            $('.cart-header1').fadeOut('slow', function (c) {
+                                $('.cart-header1').remove();
+                            });
+                        });
+                    });
+                    </script>
+                    <script>$(document).ready(function (c) {
+                        $('.close3').on('click', function (c) {
+                            $('.cart-header2').fadeOut('slow', function (c) {
+                                $('.cart-header2').remove();
+                            });
+                        });
+                    });
+                    </script>
+                    {% for o in olist %}
+                        <div class="in-check">
+                            <ul class="unit">
+                                <li><span>Number:{{o.0.number}}</span></li>
+                                <li><span></span></li>
+                                <li><span></span></li>
+                                <li><span>Create time:{{ o.0.create_time }}</span></li>
+                                <li></li>
+                                <div class="clearfix"></div>
+                            </ul>
+                            {% for commodity in o.1 %}
+                                <ul class="cart-header" style="margin-bottom: 0">
+                                    <a href="{% url 'app:removeitem' cid=commodity.0.id %}">
+                                        <div class=""></div>
+                                    </a>
+                                    <li class="ring-in">
+                                        <a href="{% url 'app:single' cid=commodity.0.id %}">
+                                            <img src="/static/upload/{{ commodity.0.picture_1 }}"
+                                                 class="img-responsive"
+                                                 alt="{{ commodity.0.cname }}" style="width: 100px;">
+                                        </a>
+                                    </li>
+                                    <li><span class="name">{{ commodity.0.sku }}</span></li>
+                                    <li>
+                                    <span class="cost">
+                                    $ {{ commodity.0.price }} / {{ commodity.1 }}
+                                    </span>
+                                    </li>
+                                    <li><span>$ {{ commodity.total_price }} / Free</span></li>
+                                    <div class="clearfix"></div>
+                                </ul>
+                            {% endfor %}
+                            <ul class="cart-header">
+
+                                <div></div>
+                                <li class="ring-in">
+                                    <div style="width: 100px;height: 100px;"></div>
+                                </li>
+                                <li><span class="name">Summary:</span></li>
+                                <li>
+                                <span class="cost">
+                                    $ {{ o.0.money }}
+                                </span>
+                                </li>
+                                <li>
+                                    <a href="{% url 'app:sellteaccounts' %}" class="add-cart item_add" id="addToCart">
+                                        settle accounts
+                                    </a>
+                                </li>
+                                <div class="clearfix"></div>
+                            </ul>
+                        </div>
+                    {% endfor %}
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--end-ckeckout-->
+{% endblock %}

@@ -109,7 +109,8 @@
                                     <li><span>SKU</span>
                                         <span class="women1">: {{ commodity.sku }}</span></li>
                                 </ul>
-                                <a href="#" class="add-cart item_add" id="addToCart">ADD TO CART</a>
+                                <a href="{% url 'app:additem' cid=commodity.id %}" class="add-cart item_add"
+                                   id="addToCart">ADD TO CART</a>
 
                             </div>
                         </div>
@@ -310,14 +311,6 @@
 
         });
     </script>
-    <script>
-        $("#addToCart").click(function () {
-            var id = {{ commodity.id }};
-            $.post("/cart/1/?action=addToCart", {'data': id,}, function (params) {
-                alert(params.msg);
-            })
-        });
 
-    </script>
 {% endblock %}
 

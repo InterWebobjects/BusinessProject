@@ -15,8 +15,16 @@ urlpatterns = [
     url(r'^single/(?P<cid>\d+)/$', views.single, name='single'),
 
     url(r'^cart/$', views.cart, name='cart'),
+    url(r'^additem/(?P<cid>\d+)/$', views.add_to_cart, name='additem'),
+    url(r'^removeitem/(?P<cid>\d+)/$', views.remove_from_cart, name='removeitem'),
+    url(r'^emptyitems/$', views.empty_from_cart, name='emptyitems'),
+
+    url(r'^sellteaccounts/$', views.sellteaccounts, name='sellteaccounts'),
+    url(r'pay', views.pay, name='pay'),
+
+    url(r'^orders/$', views.orders, name='orders'),
+    url(r'^contact/$', views.contact, name='contact'),
 
     url(r'^user/(?P<pk>\d+)/$', mine.UserAPIView.as_view(), name='user'),
-    url(r'^cart/(?P<pk>\d+)/$', mine.CartAPIView.as_view(), name='user'),
 
 ]

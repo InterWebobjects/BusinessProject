@@ -70,10 +70,15 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                         <div class="cart box_1">
                             <a href="{% url 'app:cart' %}">
                                 <div class="total">
-                                    <span class="simpleCart_total"></span></div>
+                                    <span>
+                                        $ {{ styles.4.summary }}{% if styles.4.summary == 0 %}.00{% endif %}
+                                    </span>
+                                </div>
                                 <img src="{% static 'images/cart-1.png' %}" alt=""/>
                             </a>
-                            <p><a href="javascript:" class="simpleCart_empty">Empty Cart</a></p>
+                            <p><a href="{% url 'app:emptyitems' %}?path={{ request.get_full_path }}"
+                                  class="simpleCart_empty">Empty
+                                Cart</a></p>
                             <div class="clearfix"></div>
                         </div>
                     </div>
@@ -149,9 +154,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                                     </div>
                                 </li>
 
-                                <li class="grid"><a href="typo.html" style="color: rosybrown">百达翡丽</a>
+                                <li class="grid"><a href="{% url 'app:contact' %}" style="color: rosybrown">联系我们</a>
                                 </li>
-                                <li class="grid"><a href="contact.html" style="color: rosybrown">售后与服务</a>
+                                <li class="grid"><a href="{% url 'app:orders' %}" style="color: rosybrown">售后与服务</a>
                                 </li>
                             </ul>
                         </div>

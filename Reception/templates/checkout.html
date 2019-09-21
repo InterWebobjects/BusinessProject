@@ -22,7 +22,7 @@
             </div>
             <div class="ckeckout-top">
                 <div class="cart-items">
-                    <h3>My Shopping Bag (3)</h3>
+                    <h3>My Shopping Bag ({{ cartList.count }})</h3>
                     <script>$(document).ready(function (c) {
                         $('.close1').on('click', function (c) {
                             $('.cart-header').fadeOut('slow', function (c) {
@@ -52,49 +52,51 @@
                         <ul class="unit">
                             <li><span>Item</span></li>
                             <li><span>Product Name</span></li>
-                            <li><span>Unit Price</span></li>
-                            <li><span>Delivery Details</span></li>
+                            <li><span>Unit Price / Amount</span></li>
+                            <li><span>Subtotal / Delivery Details</span></li>
                             <li></li>
                             <div class="clearfix"></div>
                         </ul>
                         {% for commodity in cartList %}
                             <ul class="cart-header">
-                                <div class="close1"></div>
+                                <a href="{% url 'app:removeitem' cid=commodity.product.id %}">
+                                    <div class="close1"></div>
+                                </a>
                                 <li class="ring-in">
-                                    <a href="{% url 'app:single' cid=commodity.cid %}">
-                                        <img src="/static/upload/{{ commodity.cid.picture_1 }}" class="img-responsive"
-                                             alt="">
+                                    <a href="{% url 'app:single' cid=commodity.product.id %}">
+                                        <img src="/static/upload/{{ commodity.product.picture_1 }}"
+                                             class="img-responsive"
+                                             alt="{{ commodity.product.cname }}" style="width: 100px;">
                                     </a>
                                 </li>
-                                <li><span class="name">{{ commodity.cid.cname }}</span></li>
-                                <li><span class="cost">$ {{ commodity.cid.price }}</span></li>
-                                <li><span>Free</span>
+                                <li><span class="name">{{ commodity.product.sku }}</span></li>
+                                <li>
+                                    <span class="cost">
+                                    $ {{ commodity.product.price }} / {{ commodity.quantity }}
+                                    </span>
+                                </li>
+                                <li><span>$ {{ commodity.total_price }} / Free</span>
                                     <p>Delivered in 2-3 business days</p></li>
                                 <div class="clearfix"></div>
                             </ul>
                         {% endfor %}
-                        <ul class=" cart-header1">
-                            <div class="close2"></div>
-                            <li class="ring-in"><a href="single.html"><img src="/static/images/c-2.jpg"
-                                                                           class="img-responsive"
-                                                                           alt=""></a>
+                        <ul class="cart-header">
+
+                            <div></div>
+                            <li class="ring-in">
+                                <div style="width: 100px;height: 100px;"></div>
                             </li>
-                            <li><span class="name">Analog Watches</span></li>
-                            <li><span class="cost">$ 300.00</span></li>
-                            <li><span>Free</span>
-                                <p>Delivered in 2-3 business days</p></li>
-                            <div class="clearfix"></div>
-                        </ul>
-                        <ul class="cart-header2">
-                            <div class="close3"></div>
-                            <li class="ring-in"><a href="single.html"><img src="/static/images/c-3.jpg"
-                                                                           class="img-responsive"
-                                                                           alt=""></a>
+                            <li><span class="name">Summary:</span></li>
+                            <li>
+                                <span class="cost">
+                                    $ {{ cartList.summary }}
+                                </span>
                             </li>
-                            <li><span class="name">Analog Watches</span></li>
-                            <li><span class="cost">$ 360.00</span></li>
-                            <li><span>Free</span>
-                                <p>Delivered in 2-3 business days</p></li>
+                            <li>
+                                <a href="{% url 'app:sellteaccounts' %}" class="add-cart item_add" id="addToCart">
+                                    settle accounts
+                                </a>
+                            </li>
                             <div class="clearfix"></div>
                         </ul>
                     </div>

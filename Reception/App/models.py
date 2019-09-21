@@ -78,10 +78,10 @@ class Commodity(models.Model):
 
 
 # 购物车
-class Cart(models.Model):
-    count = models.IntegerField()
-    cid = models.ForeignKey(Commodity, models.CASCADE, db_column='cid')
-    uid = models.ForeignKey(User, models.CASCADE, db_column='uid')
+# class Cart(models.Model):
+#     count = models.IntegerField()
+#     cid = models.ForeignKey(Commodity, models.CASCADE, db_column='cid')
+#     uid = models.ForeignKey(User, models.CASCADE, db_column='uid')
 
 
 # 订单
@@ -92,8 +92,12 @@ class Order(models.Model):
     pay_time = models.DateTimeField(blank=True, null=True)
     send_time = models.DateTimeField(blank=True, null=True)
     uid = models.ForeignKey(User, models.CASCADE, db_column='uid', blank=True, null=True)
-    cid = models.ForeignKey(Commodity, models.CASCADE, db_column='cid', blank=True, null=True)
     is_delete = models.IntegerField(default=0)
+    receive_time = models.DateTimeField(blank=True, null=True)
+    clist = models.CharField(max_length=32)
+    receiver = models.CharField(max_length=32)
+    address = models.CharField(max_length=256)
+    mobile = models.CharField(max_length=16)
 
     class Meta:
         managed = True

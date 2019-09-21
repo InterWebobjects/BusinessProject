@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'App.apps.AppConfig',
+    'cart',
 ]
 
 MIDDLEWARE = [
@@ -125,3 +126,4 @@ STATICFILES_DIRS = [
 AUTH_USER_MODEL = 'App.User'
 LOGIN_URL = '/account/'
 # MEDIA_ROOT = os.path.join(BASE_DIR, 'static/portrait')
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
