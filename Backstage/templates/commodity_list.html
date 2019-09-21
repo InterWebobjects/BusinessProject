@@ -116,10 +116,10 @@
                 {% for page in pagetor.page_range %}
                     {% if page == pagetion.number %}
                         <li style="display: inline" class="item active">
-                            <a class="num" name="page" href="{% url 'app:batch_deletion' page %}">{{ page }}</a></li>
+                            <a class="num" name="page" href="{% url 'app:batch_deletion' page=page %}">{{ page }}</a></li>
                     {% else %}
                         <li style="display: inline">
-                            <a class="num" name="page" href="{% url 'app:batch_deletion' page %}">{{ page }}</a></li>
+                            <a class="num" name="page" href="{% url 'app:batch_deletion' page=page %}">{{ page }}</a></li>
                     {% endif %}
                 {% endfor %}
 
@@ -181,6 +181,7 @@
 
 
     function delAll(argument) {
+
 
         var data = tableCheck.getData();
 

@@ -47,9 +47,10 @@
     <xblock>
 
         <button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除</button>
-        <button class="layui-btn" name="adds" value="3"  onclick="x_admin_show('添加用户','{% url 'app:registered'  %}',600,400)"><i class="layui-icon"></i>添加
+        <button class="layui-btn" name="adds" value="3"
+                onclick="x_admin_show('添加用户','{% url 'app:registered' %}',600,400)"><i class="layui-icon"></i>添加
         </button>
-        <span class="x-right" style="line-height:40px">共有数据：{{ uses|length }} 条</span>
+        <span class="x-right" style="line-height:40px">共有数据：{{ isactive|length }} 条</span>
     </xblock>
     <table class="layui-table">
         <thead>
@@ -72,46 +73,47 @@
         </thead>
         <tbody>
         {% for use in pagetion %}
-            {% if isactive.is_active == '1' %}
+            {% if use.is_active == 1 %}
 
 
-            <tr>
-                <td>
-                    <div class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id='{{ use.uid }}'><i
-                            class="layui-icon">&#xe605;</i></div>
-                </td>
-                <td>{{ use.uid }}</td>
-                <td>{{ use.first_name }}</td>
-                            <td>{{ use.last_name }}</td>
+                <tr>
+                    <td>
+                        <div class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id='{{ use.uid }}'><i
+                                class="layui-icon">&#xe605;</i></div>
+                    </td>
+                    <td>{{ use.uid }}</td>
+                    <td>{{ use.first_name }}</td>
+                    <td>{{ use.last_name }}</td>
 
-                {% if use.gender == 1 %}
-                    <td>男</td>
-                {% else %}
-                    <td>女</td>
-                {% endif %}
-                <td>{{ use.mobile }}</td>
-                <td>{{ use.email }}</td>
-                <td>{{ use.address }}</td>
-                <td>
-                    {{ use.date_joined }}
-                </td>
-                <td class="td-status">
-                    <span class="layui-btn layui-btn-normal layui-btn-mini">已启用</span></td>
-                <td class="td-manage">
-                    <a onclick="member_stop(this,'10001')" href="javascript:;" title="启用">
-                        <i class="layui-icon">&#xe601;</i>
-                    </a>
-                    <a title="编辑" onclick="x_admin_show('编辑','member-edit.html',600,400)" href="javascript:;">
-                        <i class="layui-icon">&#xe642;</i>
-                    </a>
-                    <a onclick="x_admin_show('修改密码','member-password.html',600,400)" title="修改密码" href="javascript:;">
-                        <i class="layui-icon">&#xe631;</i>
-                    </a>
-                    <a title="删除" onclick="member_del(this,'要删除的id')" href="javascript:;">
-                        <i class="layui-icon">&#xe640;</i>
-                    </a>
-                </td>
-            </tr>
+                    {% if use.gender == 1 %}
+                        <td>男</td>
+                    {% else %}
+                        <td>女</td>
+                    {% endif %}
+                    <td>{{ use.mobile }}</td>
+                    <td>{{ use.email }}</td>
+                    <td>{{ use.address }}</td>
+                    <td>
+                        {{ use.date_joined }}
+                    </td>
+                    <td class="td-status">
+                        <span class="layui-btn layui-btn-normal layui-btn-mini">已启用</span></td>
+                    <td class="td-manage">
+                        <a onclick="member_stop(this,'10001')" href="javascript:;" title="启用">
+                            <i class="layui-icon">&#xe601;</i>
+                        </a>
+                        <a title="编辑" onclick="x_admin_show('编辑','member-edit.html',600,400)" href="javascript:;">
+                            <i class="layui-icon">&#xe642;</i>
+                        </a>
+                        <a onclick="x_admin_show('修改密码','member-password.html',600,400)" title="修改密码"
+                           href="javascript:;">
+                            <i class="layui-icon">&#xe631;</i>
+                        </a>
+                        <a title="删除" onclick="member_del(this,'要删除的id')" href="javascript:;">
+                            <i class="layui-icon">&#xe640;</i>
+                        </a>
+                    </td>
+                </tr>
             {% endif %}
         {% endfor %}
         </tbody>
@@ -120,18 +122,18 @@
         <div>
             <ul>
 
-                <li style="display: inline"><a class="prev" href="{% url 'app:students' page=1 %}">&lt;&lt;</a></li>
-                {% for page in pagetor.page_range%}
-                {% if page == pagetion.number %}
-                    <li style="display: inline" class="item active">
-                        <a class="num" name="page" href="{% url 'app:students' page %}">{{ page }}</a></li>
-                {% else %}
-                    <li style="display: inline" >
-                        <a class="num" name="page" href="{% url 'app:students' page %}">{{ page }}</a></li>
-                {% endif %}
+                <li style="display: inline"><a class="prev" href="{% url 'app:add_shudent' page=1 %}">&lt;&lt;</a></li>
+                {% for page in pagetor.page_range %}
+                    {% if page == pagetion.number %}
+                        <li style="display: inline" class="item active">
+                            <a class="num" name="page" href="{% url 'app:add_shudent' page=page %}">{{ page }}</a></li>
+                    {% else %}
+                        <li style="display: inline">
+                            <a class="num" name="page" href="{% url 'app:add_shudent' page=page %}">{{ page }}</a></li>
+                    {% endif %}
                 {% endfor %}
 
-                <li style="display: inline"><a class="next" href="{% url 'app:students' page=pagetor.num_pages %}">&gt;&gt;</a>
+                <li style="display: inline"><a class="next" href="{% url 'app:add_shudent' page=pagetor.num_pages %}">&gt;&gt;</a>
                 </li>
 
             </ul>
@@ -194,7 +196,7 @@
 
         layer.confirm('确认要删除吗？' + data, function (index) {
             //捉到所有被选中的，发异步进行删除
-            window.location='http://127.0.0.1:8000/student/?page=1&data='+data;
+            window.location = 'http://127.0.0.1:8001/add_student/?page=1&data=' + data;
             layer.msg('删除成功', {icon: 1});
             $(".layui-form-checked").not('.header').parents('tr').remove();
         });

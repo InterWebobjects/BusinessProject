@@ -9,7 +9,7 @@ from django.shortcuts import render, redirect
 # Create your views here.
 from pyecharts import Bar
 
-from App.models import User, Commodity, Style
+from App.models import User, Commodity, Style, Order
 
 
 # 主页
@@ -24,12 +24,29 @@ def index_Desktop(request):
     return render(request, 'welcome.html')
 
 
-# 桌面
-def welcome(request):
-    # if request.GET.get('memberlist'):
-    #     return render(request, 'member-list.html', locals())
+# 订单
+def welcome(request, page=1):
+    uses = Order.objects.all()
+    content = request.GET.get('page')
+    pagetor = Paginator(uses, 5)
+    pagetion = pagetor.page((page))
 
-    return render(request, 'order-list.html')
+    return render(request, 'order-list.html', locals())
+
+
+# 订单详情
+
+def views_user(request, id):
+    commodity = Order.objects.get(id=int(id))
+    itemlist = commodity.clist.split(',')[:-1]
+    comList = []
+
+    for item in itemlist:
+        com = Commodity.objects.get(id=(item[0]))
+        num = int(item[-1])
+        comList.append((com, num))
+
+    return render(request, 'order_detail的副本.html', locals())
 
 
 # 会员
@@ -40,41 +57,60 @@ def users(request):
 # 用户详情
 def students_Add(request, page=1):
     uses = User.objects.all()
-    isactive=User.objects.filter(is_active=0)
+    isactive = User.objects.filter(is_active=0)
     content = request.GET.get('page')
-    pagetor = Paginator(uses,5)
+    pagetor = Paginator(uses, 5)
     pagetion = pagetor.page(int(page))
-    if request.method == 'GET':
-        removelist=request.GET.get('data')
-        remove=removelist.split(',')
-        for i in remove:
-            rm=User.objects.get(uid=int(i))
-            rm.is_active=0
-            rm.save()
 
     return render(request, 'member-list.html', locals())
 
 
-def students_Del(request):
-    return render(request, 'member-del.html')
+# 用户删除
+def add_user(request, page=1):
+    if page == '':
+        page = 1
+    removelist = request.GET.get('data')
+    if removelist:
+        remove = removelist.split(',')
+        for i in remove:
+            rm = User.objects.get(uid=int(i))
+            rm.is_active = 0
+            rm.save()
+    uses = User.objects.all()
+    isactive = User.objects.filter(is_active=0)
+    coms = User.objects.all()
+    content = request.GET.get('page')
+    pagetor = Paginator(coms, 5)
+    pagetion = pagetor.page(int(page))
+
+    return render(request, 'member-list.html', locals())
+
+
+# 用户添加
+def students_Del(request, page=1):
+    if page == '':
+        page = 1
+    removelist = request.GET.get('data')
+    if removelist:
+        remove = removelist.split(',')
+        for i in remove:
+            rm = User.objects.get(uid=int(i))
+            rm.is_active = 1
+            rm.save()
+    uses = User.objects.all()
+    isactive = User.objects.filter(is_active=1)
+    coms = User.objects.all()
+    content = request.GET.get('page')
+    pagetor = Paginator(coms, 5, 2)
+    pagetion = pagetor.page(int(page))
+
+    return render(request, 'member-del.html', locals())
 
 
 # 分类
 def category(request):
     return render(request, 'cate.html')
 
-
-# #添加大类
-# def category_add(request):
-#     return render(request,'cate.html')
-
-# #添加小类
-# def category_small(request):
-#     if request.method =='POST':
-#         if request.POST.get('add_small'):
-#
-#
-#             return render(request, 'subjectAdd.html')
 
 # 登录
 def login(request):
@@ -154,11 +190,11 @@ def add_commodity(request):
 
 
 def del_commodity(request, page=1):
-    if page=='':
-        page=1
+    if page == '':
+        page = 1
     coms = Commodity.objects.all()
     isdels = Commodity.objects.filter(is_delete=1)
-    content = request.GET.get('page',1)
+    content = request.GET.get('page', 5)
     pagetor = Paginator(coms, 5)
     pagetion = pagetor.page(int(page))
 
@@ -166,34 +202,40 @@ def del_commodity(request, page=1):
 
 
 # 批量删除
-def batchdeletion(request,page=1):
-    a=request.GET.get('data')
-    b=a.split(',')
+def batchdeletion(request, page=1):
+    if page == '':
+        page = 1
+    removelist = request.GET.get('data')
+    if removelist:
+        remove = removelist.split(',')
+        for i in remove:
+            rm = User.objects.get(uid=int(i))
+            rm.is_active = 0
+            rm.save()
+    uses = Commodity.objects.all()
+    isactive = Commodity.objects.filter(is_delete=0)
     coms = Commodity.objects.all()
     content = request.GET.get('page')
     pagetor = Paginator(coms, 5)
     pagetion = pagetor.page(int(page))
-
-    for i in b :
-        commodity=Commodity.objects.get(id=int(i))
-        commodity.is_delete=1
-        commodity.save()
+    return render(request, 'commodity_list.html', locals())
 
 
-    return render(request,'commodity_list.html',locals())
-
-
-
-def batchrestore(request,page=1):
-    a=request.GET.get('data')
-    b=a.split(',')
+# 批量恢复
+def batchrestore(request, page=1):
+    if page == '':
+        page = 1
+    removelist = request.GET.get('data')
+    if removelist:
+        remove = removelist.split(',')
+        for i in remove:
+            rm = User.objects.get(uid=int(i))
+            rm.is_active = 0
+            rm.save()
+    uses = Commodity.objects.all()
+    isactive = Commodity.objects.filter(is_delete=1)
     coms = Commodity.objects.all()
     content = request.GET.get('page')
     pagetor = Paginator(coms, 5)
     pagetion = pagetor.page(int(page))
-    for i in b :
-        commodity=Commodity.objects.get(id=int(i))
-        commodity.is_delete=0
-        commodity.save()
-
-    return render(request,'commodity_del.html',locals())
+    return render(request, 'commodity_del.html', locals())

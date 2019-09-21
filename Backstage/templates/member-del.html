@@ -50,77 +50,85 @@
             <th>
               <div class="layui-unselect header layui-form-checkbox" lay-skin="primary"><i class="layui-icon">&#xe605;</i></div>
             </th>
-            <th>ID</th>
-            <th>用户名</th>
+              <th>ID</th>
+            <th>名</th>
+            <th>姓</th>
             <th>性别</th>
             <th>手机</th>
             <th>邮箱</th>
             <th>地址</th>
             <th>加入时间</th>
             <th>状态</th>
-            <th>操作</th></tr>
+            <th>操作</th>
         </thead>
-        <tbody>
-          <tr>
-            <td>
-              <div class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id='2'><i class="layui-icon">&#xe605;</i></div>
-            </td>
-            <td>1</td>
-            <td>小明</td>
-            <td>男</td>
-            <td>13000000000</td>
-            <td>admin@mail.com</td>
-            <td>北京市 海淀区</td>
-            <td>2017-01-01 11:11:42</td>
-            <td class="td-status">
-              <span class="layui-btn layui-btn-danger layui-btn-mini">
-                                已删除
-                            </span>
-            <td class="td-manage">
-              <a title="恢复" onclick="member_del(this,'要删除的id')" href="javascript:;">
-                <i class="layui-icon">&#xe618;</i>
-              </a>
-              <a title="删除" onclick="member_del(this,'要删除的id')" href="javascript:;">
-                <i class="layui-icon">&#xe640;</i>
-              </a>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <div class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id='2'><i class="layui-icon">&#xe605;</i></div>
-            </td>
-            <td>1</td>
-            <td>小明</td>
-            <td>男</td>
-            <td>13000000000</td>
-            <td>admin@mail.com</td>
-            <td>北京市 海淀区</td>
-            <td>2017-01-01 11:11:42</td>
-            <td class="td-status">
-              <span class="layui-btn layui-btn-danger layui-btn-mini">
-                                已删除
-                            </span>
-            <td class="td-manage">
-              <a title="恢复" onclick="member_del(this,'要删除的id')" href="javascript:;">
-                <i class="layui-icon">&#xe618;</i>
-              </a>
-              <a title="删除" onclick="member_del(this,'要删除的id')" href="javascript:;">
-                <i class="layui-icon">&#xe640;</i>
-              </a>
-            </td>
-          </tr>
+  <tbody>
+        {% for use in pagetion %}
+            {% if use.is_active == 0 %}
+
+
+                <tr>
+                    <td>
+                        <div class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id='{{ use.uid }}'><i
+                                class="layui-icon">&#xe605;</i></div>
+                    </td>
+                    <td>{{ use.uid }}</td>
+                    <td>{{ use.first_name }}</td>
+                    <td>{{ use.last_name }}</td>
+
+                    {% if use.gender == 1 %}
+                        <td>男</td>
+                    {% else %}
+                        <td>女</td>
+                    {% endif %}
+                    <td>{{ use.mobile }}</td>
+                    <td>{{ use.email }}</td>
+                    <td>{{ use.address }}</td>
+                    <td>
+                        {{ use.date_joined }}
+                    </td>
+                    <td class="td-status">
+                        <span class="layui-btn layui-btn-normal layui-btn-mini">已启用</span></td>
+                    <td class="td-manage">
+                        <a onclick="member_stop(this,'10001')" href="javascript:;" title="启用">
+                            <i class="layui-icon">&#xe601;</i>
+                        </a>
+                        <a title="编辑" onclick="x_admin_show('编辑','member-edit.html',600,400)" href="javascript:;">
+                            <i class="layui-icon">&#xe642;</i>
+                        </a>
+                        <a onclick="x_admin_show('修改密码','member-password.html',600,400)" title="修改密码"
+                           href="javascript:;">
+                            <i class="layui-icon">&#xe631;</i>
+                        </a>
+                        <a title="删除" onclick="member_del(this,'要删除的id')" href="javascript:;">
+                            <i class="layui-icon">&#xe640;</i>
+                        </a>
+                    </td>
+                </tr>
+            {% endif %}
+        {% endfor %}
         </tbody>
       </table>
       <div class="page">
         <div>
-          <a class="prev" href="">&lt;&lt;</a>
-          <a class="num" href="">1</a>
-          <span class="current">2</span>
-          <a class="num" href="">3</a>
-          <a class="num" href="">489</a>
-          <a class="next" href="">&gt;&gt;</a>
+            <ul>
+
+                <li style="display: inline"><a class="prev" href="{% url 'app:students_del' page=1 %}">&lt;&lt;</a></li>
+                {% for page in pagetor.page_range %}
+                    {% if page == pagetion.number %}
+                        <li style="display: inline" class="item active">
+                            <a class="num" name="page" href="{% url 'app:students_del' page=page %}">{{ page }}</a></li>
+                    {% else %}
+                        <li style="display: inline">
+                            <a class="num" name="page" href="{% url 'app:students_del' page=page %}">{{ page }}</a></li>
+                    {% endif %}
+                {% endfor %}
+
+                <li style="display: inline"><a class="next" href="{% url 'app:students_del' page=pagetor.num_pages %}">&gt;&gt;</a>
+                </li>
+
+            </ul>
         </div>
-      </div>
+    </div>
 
     </div>
     <script>
@@ -156,6 +164,7 @@
   
         layer.confirm('确认要恢复吗？'+data,function(index){
             //捉到所有被选中的，发异步进行删除
+            window.location='http://127.0.0.1:8000/student_del/?page=1&data='+data;
             layer.msg('恢复成功', {icon: 1});
             $(".layui-form-checked").not('.header').parents('tr').remove();
         });
