@@ -77,22 +77,22 @@
                                 </div>
 
                                 <h5 class="item_price">$ {{ commodity.price }}</h5>
-                                <p>{{ commodity.watch }}</p>
+                                <p>{{ commodity.description }}</p>
                                 <div class="available">
                                     <ul>
-                                        <li>Color
-                                            <select>
-                                                <option>Silver</option>
-                                                <option>Black</option>
-                                                <option>Dark Black</option>
-                                                <option>Red</option>
-                                            </select></li>
-                                        <li class="size-in">Size<select>
-                                            <option>Large</option>
-                                            <option>Medium</option>
-                                            <option>small</option>
-
-                                        </select></li>
+                                        {#                                        <li>Color#}
+                                        {#                                            <select>#}
+                                        {#                                                <option>Silver</option>#}
+                                        {#                                                <option>Black</option>#}
+                                        {#                                                <option>Dark Black</option>#}
+                                        {#                                                <option>Red</option>#}
+                                        {#                                            </select></li>#}
+                                        {#                                        <li class="size-in">Size<select>#}
+                                        {#                                            <option>Large</option>#}
+                                        {#                                            <option>Medium</option>#}
+                                        {#                                            <option>small</option>#}
+                                        {##}
+                                        {#                                        </select></li>#}
                                         <div class="clearfix"></div>
                                     </ul>
                                 </div>
@@ -119,11 +119,11 @@
                     <div class="tabs">
                         <ul class="menu_drop">
                             <li class="item1">
-                                <a href="#"><img src="/static/images/arrow.png" alt="">简介</a>
+                                <a href="#"><img src="/static/images/arrow.png" alt="">腕表</a>
                                 <ul>
                                     <li class="subitem1">
                                         <a href="#" style="font-size: 16px;color: #8c7b67;">
-                                            {{ commodity.description }}
+                                            {{ commodity.watch }}
                                         </a>
                                     </li>
                                 </ul>

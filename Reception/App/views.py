@@ -1,5 +1,6 @@
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
+from django.core.mail import send_mail
 from django.db.models import Q
 from django.shortcuts import render, redirect
 
@@ -8,6 +9,8 @@ from django.urls import reverse
 
 from App.models import *
 from cart.cart import Cart
+
+from Reception.settings import EMAIL_HOST_USER
 
 
 def styleList(request):
@@ -135,7 +138,7 @@ def pay(request):
 
 @login_required
 def orders(request):
-    orders = Order.objects.filter(uid=request.user.uid)
+    orders = Order.objects.filter(uid=request.user.uid).order_by('-id')
     olist = []
     for order in orders:
         item_list = order.clist.split(',')[:-1]
@@ -143,12 +146,34 @@ def orders(request):
         for item in item_list:
             com = Commodity.objects.get(id=int(item[0]))
             num = int(item[-1])
-            comlist.append((com, num))
+            comlist.append((com, num, com.price * num))
         olist.append((order, comlist))
     styles = styleList(request)
     return render(request, 'orders.html', locals())
 
 
 def contact(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        phone = request.POST.get('phone')
+        email = request.POST.get('email')
+        message = request.POST.get('message')
+        print('send')
+        send_mail(
+            'From:' + name + '<' + email + '>',
+            message,
+            EMAIL_HOST_USER,
+            ['kornchn@outlook.com'],
+            fail_silently=False
+        )
+        print('finish')
     styles = styleList(request)
     return render(request, 'contact.html', locals())
+
+
+def confirm(request):
+    order_id = request.GET.get('id')
+    order_confirm = Order.objects.get(id=int(order_id))
+    order_confirm.receive_time = datetime.now()
+    order_confirm.save()
+    return redirect(reverse('app:orders'))

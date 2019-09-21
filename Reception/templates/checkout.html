@@ -80,25 +80,27 @@
                                 <div class="clearfix"></div>
                             </ul>
                         {% endfor %}
-                        <ul class="cart-header">
+                        {% if cartList.count > 0 %}
+                            <ul class="cart-header">
 
-                            <div></div>
-                            <li class="ring-in">
-                                <div style="width: 100px;height: 100px;"></div>
-                            </li>
-                            <li><span class="name">Summary:</span></li>
-                            <li>
+                                <div></div>
+                                <li class="ring-in">
+                                    <div style="width: 100px;height: 100px;"></div>
+                                </li>
+                                <li><span class="name">Summary:</span></li>
+                                <li>
                                 <span class="cost">
                                     $ {{ cartList.summary }}
                                 </span>
-                            </li>
-                            <li>
-                                <a href="{% url 'app:sellteaccounts' %}" class="add-cart item_add" id="addToCart">
-                                    settle accounts
-                                </a>
-                            </li>
-                            <div class="clearfix"></div>
-                        </ul>
+                                </li>
+                                <li>
+                                    <a href="{% url 'app:sellteaccounts' %}" class="add-cart item_add" id="addToCart">
+                                        settle accounts
+                                    </a>
+                                </li>
+                                <div class="clearfix"></div>
+                            </ul>
+                        {% endif %}
                     </div>
                 </div>
             </div>

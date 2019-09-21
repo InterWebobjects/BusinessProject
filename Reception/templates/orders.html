@@ -50,15 +50,28 @@
                     {% for o in olist %}
                         <div class="in-check">
                             <ul class="unit">
-                                <li><span>Number:{{o.0.number}}</span></li>
-                                <li><span></span></li>
-                                <li><span></span></li>
+                                <li><span>Number:{{ o.0.number }}</span></li>
+                                <li>
+                                    <span>Status:
+                                    {% if o.0.receive_time %}
+                                        Finished
+                                    {% elif o.0.send_time %}
+                                        Transporting
+                                    {% elif o.0.pay_time %}
+                                        To be delivered
+                                    {% else %}
+                                        Unpaid
+                                    {% endif %}
+                                    </span>
+                                </li>
+                                <li><span>To:{{ o.0.receiver }}</span></li>
                                 <li><span>Create time:{{ o.0.create_time }}</span></li>
                                 <li></li>
                                 <div class="clearfix"></div>
                             </ul>
                             {% for commodity in o.1 %}
-                                <ul class="cart-header" style="margin-bottom: 0">
+                                <ul class="cart-header"
+                                    style="margin-bottom: 0;{% if not forloop.last %}border-bottom: none;{% endif %}">
                                     <a href="{% url 'app:removeitem' cid=commodity.0.id %}">
                                         <div class=""></div>
                                     </a>
@@ -75,7 +88,7 @@
                                     $ {{ commodity.0.price }} / {{ commodity.1 }}
                                     </span>
                                     </li>
-                                    <li><span>$ {{ commodity.total_price }} / Free</span></li>
+                                    <li><span>Subtotal: $ {{ commodity.2 }}</span></li>
                                     <div class="clearfix"></div>
                                 </ul>
                             {% endfor %}
@@ -92,9 +105,32 @@
                                 </span>
                                 </li>
                                 <li>
-                                    <a href="{% url 'app:sellteaccounts' %}" class="add-cart item_add" id="addToCart">
-                                        settle accounts
-                                    </a>
+                                    {% if o.0.receive_time %}
+                                        <a href="{% url 'app:sellteaccounts' %}" class="add-cart item_add"
+                                           id="addToCart"
+                                           style="width: 170px;text-align: center;">
+                                            Goods back
+                                        </a>
+                                    {% elif o.0.send_time %}
+                                        <a href="{% url 'app:confirm' %}?id={{ o.0.id }}" class="add-cart item_add"
+                                           id="addToCart"
+                                           style="width: 170px;text-align: center;">
+                                            Confirm receipt
+                                        </a>
+                                    {% elif o.0.pay_time %}
+                                        <a href="{% url 'app:sellteaccounts' %}" class="add-cart item_add"
+                                           id="addToCart"
+                                           style="width: 170px;text-align: center;">
+                                            refund
+                                        </a>
+                                    {% else %}
+                                        <a href="{% url 'app:sellteaccounts' %}" class="add-cart item_add"
+                                           id="addToCart"
+                                           style="width: 170px;text-align: center;">
+                                            pay
+                                        </a>
+                                    {% endif %}
+
                                 </li>
                                 <div class="clearfix"></div>
                             </ul>

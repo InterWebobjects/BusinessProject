@@ -25,6 +25,8 @@ urlpatterns = [
     url(r'^orders/$', views.orders, name='orders'),
     url(r'^contact/$', views.contact, name='contact'),
 
+    url(r'^confirm/$', views.confirm, name='confirm'),
+
     url(r'^user/(?P<pk>\d+)/$', mine.UserAPIView.as_view(), name='user'),
 
 ]
