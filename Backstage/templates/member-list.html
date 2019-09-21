@@ -72,12 +72,12 @@
         </thead>
         <tbody>
         {% for use in pagetion %}
-
+            {% if isactive.is_active == '1' %}
 
 
             <tr>
                 <td>
-                    <div class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id='2'><i
+                    <div class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id='{{ use.uid }}'><i
                             class="layui-icon">&#xe605;</i></div>
                 </td>
                 <td>{{ use.uid }}</td>
@@ -112,6 +112,7 @@
                     </a>
                 </td>
             </tr>
+            {% endif %}
         {% endfor %}
         </tbody>
     </table>
@@ -193,6 +194,7 @@
 
         layer.confirm('确认要删除吗？' + data, function (index) {
             //捉到所有被选中的，发异步进行删除
+            window.location='http://127.0.0.1:8000/student/?page=1&data='+data;
             layer.msg('删除成功', {icon: 1});
             $(".layui-form-checked").not('.header').parents('tr').remove();
         });

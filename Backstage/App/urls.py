@@ -15,10 +15,17 @@ urlpatterns = [
     # url(r'^category_add/$',views.category_add,name='category_add'),
     # url(r'^category_small/$',views.category_small,name='category_small'),
     url(r'^login/$', views.login, name='login'),
-    url(r'^registered/$',views.registered,name='registered'),
+    url(r'^registered/$', views.registered, name='registered'),
 
-    url(r'^commodity/(?P<page>\d+)/$',views.commodity_list,name='commodity'),
-    url(r'^commodity/$',views.commodity_list,name='commodity'),
-    url(r'^add_commodity/$',views.add_commodity,name='add_commodity'),
+    url(r'^commodity/(?P<page>\d+)/$', views.commodity_list, name='commodity'),
+    url(r'^commodity/$', views.commodity_list, name='commodity'),
+    url(r'^add_commodity/$', views.add_commodity, name='add_commodity'),
+    url(r'^del_commodity/$', views.del_commodity, name='del_commodity'),
+    url(r'^del_commodity/(?P<page>\d+)/$', views.del_commodity, name='del_commodity'),
+    # 批量删除
+    url(r'^batch_deletions/$', views.batchdeletion, name='batch_deletion'),
+    url(r'^batch_deletions/(?P<page>\d+)/$', views.batchdeletion, name='batch_deletion'),
+    url(r'^batch_restore/$', views.batchrestore, name='batch_restore'),
+    url(r'^batch_restore/(?P<page>\d+)/$', views.batchrestore, name='batch_restore'),
 
 ]

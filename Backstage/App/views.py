@@ -4,7 +4,7 @@ from Backstage.settings import MDEIA_ROOT
 from tools.fileupload import FileUpload
 from django.core.paginator import Paginator
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 # Create your views here.
 from pyecharts import Bar
@@ -40,9 +40,17 @@ def users(request):
 # 用户详情
 def students_Add(request, page=1):
     uses = User.objects.all()
+    isactive=User.objects.filter(is_active=0)
     content = request.GET.get('page')
-    pagetor = Paginator(uses, 3)
+    pagetor = Paginator(uses,5)
     pagetion = pagetor.page(int(page))
+    if request.method == 'GET':
+        removelist=request.GET.get('data')
+        remove=removelist.split(',')
+        for i in remove:
+            rm=User.objects.get(uid=int(i))
+            rm.is_active=0
+            rm.save()
 
     return render(request, 'member-list.html', locals())
 
@@ -75,7 +83,6 @@ def login(request):
 
 # 注册
 def registered(request):
-
     if request.method == 'POST':
         emali = request.POST.get('email')
         firstname = request.POST.get('firstname')
@@ -101,42 +108,92 @@ def registered(request):
 # 商品
 def commodity_list(request, page=1):
     coms = Commodity.objects.all()
+    isdel = Commodity.objects.filter(is_delete=0)
     content = request.GET.get('page')
-    pagetor = Paginator(coms, 3)
+    pagetor = Paginator(coms, 5)
     pagetion = pagetor.page(int(page))
     return render(request, 'commodity_list.html', locals())
 
-#添加商品
+
+# 添加商品
 def add_commodity(request):
     path = MDEIA_ROOT
-    if request.method =='POST':
+    if request.method == 'POST':
         if request.POST.get('submit'):
             data = Commodity()
-            watchtypes=request.POST.get('watchtype')
-            file1=request.FILES.get('file1')
+            watchtypes = request.POST.get('watchtype')
+            file1 = request.FILES.get('file1')
             obj = FileUpload(file1, is_randomname=True)
             obj.upload(path)
-            data.picture_1=obj.file_name
-            file2=request.FILES.get('file2')
+            data.picture_1 = obj.file_name
+            file2 = request.FILES.get('file2')
             obj = FileUpload(file2, is_randomname=True)
             obj.upload(path)
-            data.picture_2=obj.file_name
-            file3=request.FILES.get('file3')
+            data.picture_2 = obj.file_name
+            file3 = request.FILES.get('file3')
             obj = FileUpload(file3, is_randomname=True)
             obj.upload(path)
-            data.picture_3=obj.file_name
-            desc=request.POST.get('desc')
-            data.price=request.POST.get('price')
-            data.cname=request.POST.get('commodity')
-            data.sku=request.POST.get('number')
-            data.plate=request.POST.get('c1')
-            data.case=request.POST.get('c2')
-            data.gem=request.POST.get('c3')
-            data.strap=request.POST.get('c4')
-            data.tag=request.POST.get('shipping')
-            data.sid=Style.objects.filter(sid=watchtypes).first()
-            data.description=desc
+            data.picture_3 = obj.file_name
+            desc = request.POST.get('desc')
+            data.price = request.POST.get('price')
+            data.cname = request.POST.get('commodity')
+            data.sku = request.POST.get('number')
+            data.plate = request.POST.get('c1')
+            data.case = request.POST.get('c2')
+            data.gem = request.POST.get('c3')
+            data.strap = request.POST.get('c4')
+            data.tag = request.POST.get('shipping')
+            data.sid = Style.objects.filter(sid=watchtypes).first()
+            data.description = desc
+            data.watch = request.POST.get('watch')
             data.save()
-            return  render(request,'order-list.html')
 
-    return render(request,'order-add.html',locals())
+            return render(request, 'order-list.html')
+
+    return render(request, 'order-add.html', locals())
+
+
+def del_commodity(request, page=1):
+    if page=='':
+        page=1
+    coms = Commodity.objects.all()
+    isdels = Commodity.objects.filter(is_delete=1)
+    content = request.GET.get('page',1)
+    pagetor = Paginator(coms, 5)
+    pagetion = pagetor.page(int(page))
+
+    return render(request, 'commodity_del.html', locals())
+
+
+# 批量删除
+def batchdeletion(request,page=1):
+    a=request.GET.get('data')
+    b=a.split(',')
+    coms = Commodity.objects.all()
+    content = request.GET.get('page')
+    pagetor = Paginator(coms, 5)
+    pagetion = pagetor.page(int(page))
+
+    for i in b :
+        commodity=Commodity.objects.get(id=int(i))
+        commodity.is_delete=1
+        commodity.save()
+
+
+    return render(request,'commodity_list.html',locals())
+
+
+
+def batchrestore(request,page=1):
+    a=request.GET.get('data')
+    b=a.split(',')
+    coms = Commodity.objects.all()
+    content = request.GET.get('page')
+    pagetor = Paginator(coms, 5)
+    pagetion = pagetor.page(int(page))
+    for i in b :
+        commodity=Commodity.objects.get(id=int(i))
+        commodity.is_delete=0
+        commodity.save()
+
+    return render(request,'commodity_del.html',locals())

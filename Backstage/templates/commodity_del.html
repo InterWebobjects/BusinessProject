@@ -21,8 +21,6 @@
     <![endif]-->
 
 
-
-
 </head>
 
 <body class="layui-anim layui-anim-up">
@@ -41,89 +39,78 @@
 
     <xblock>
 
-        <button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除</button>
-        <button class="layui-btn" name="adds" value="3"
-                onclick="x_admin_show('添加用户','{% url 'app:add_commodity' %}',600,400)"><i class="layui-icon"></i>添加
-        </button>
-
-        <span class="x-right" style="line-height:40px">共有数据：{{ isdel|length }} 条</span>
-
+        <button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量恢复</button>
+        <span class="x-right" style="line-height:40px">共有数据：{{ isdels|length }} 条</span>
     </xblock>
-
-        <table class="layui-table">
-            <thead>
-            <tr>
-                <th>
-                   <div class="layui-unselect header layui-form-checkbox" lay-skin="primary"><i
+    <table class="layui-table">
+        <thead>
+        <tr>
+            <th>
+                <div class="layui-unselect header layui-form-checkbox" lay-skin="primary"><i
                         class="layui-icon">&#xe605;</i></div>
+            </th>
+            <th>商品名称</th>
+            <th>商品编号</th>
+            <th>表盘</th>
+            <th>标签</th>
+            <th>表壳</th>
+            <th>宝石镶嵌</th>
+            <th>表带</th>
+            <th>类别</th>
+            <th>描述</th>
 
-                </th>
-                <th>商品名称</th>
-                <th>商品编号</th>
-                <th>表盘</th>
-                <th>标签</th>
-                <th>表壳</th>
-                <th>宝石镶嵌</th>
-                <th>表带</th>
-                <th>类别</th>
-                <th>描述</th>
 
+        </tr>
+        </thead>
+        <tbody>
+        {% for use in pagetion %}
 
-            </tr>
-            </thead>
-            <tbody>
-            {% for use in pagetion %}
+        {% if use.is_delete == 1 %}
 
-                {% if use.is_delete == 0 %}
-
-                    <tr>
-                        <td>
+            <tr>
+                <td>
                     <div class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id='{{ use.id }}'><i
                             class="layui-icon">&#xe605;</i></div>
-                        </td>
-                        <td style="width: 100px">{{ use.cname }}</td>
-                        <td style="width: 100px">{{ use.sku }}</td>
-                        <td>{{ use.plate }}</td>
+                </td>
+                <td style="width: 100px">{{ use.cname }}</td>
+                <td style="width: 100px">{{ use.sku }}</td>
+                <td>{{ use.plate }}</td>
 
-                        {% if use.tag == '1' %}
-                            <td style="width: 50px">男式</td>
-                        {% else %}
-                            <td style="width: 50px">女式</td>
-                        {% endif %}
-                        <td>{{ use.case }}</td>
-
-                        <td style="width: 75px">{{ use.gem }}</td>
-                        <td>{{ use.strap }}</td>
-                        <td style="width: 100px">{{ use.sid.s_name }}</td>
-                        <td>
-                            {{ use.description }}
-                        </td>
-
-                    </tr>
+                {% if use.tag == '1' %}
+                    <td style="width: 50px">男式</td>
+                {% else %}
+                    <td style="width: 50px">女式</td>
                 {% endif %}
-            {% endfor %}
-            </tbody>
+                <td>{{ use.case }}</td>
 
-        </table>
+                <td style="width: 75px">{{ use.gem }}</td>
+                <td>{{ use.strap }}</td>
+                <td style="width: 100px">{{ use.sid.s_name }}</td>
+                <td>
+                    {{ use.description }}
+                </td>
 
-
+            </tr>
+            {% endif %}
+        {% endfor %}
+        </tbody>
+    </table>
     <div class="page">
         <div>
             <ul>
 
-                <li style="display: inline"><a class="prev" href="{% url 'app:batch_deletion' page=1 %}">&lt;&lt;</a>
-                </li>
+                <li style="display: inline"><a class="prev" href="{% url 'app:batch_restore' page=1 %}">&lt;&lt;</a></li>
                 {% for page in pagetor.page_range %}
                     {% if page == pagetion.number %}
                         <li style="display: inline" class="item active">
-                            <a class="num" name="page" href="{% url 'app:batch_deletion' page %}">{{ page }}</a></li>
+                            <a class="num" name="page" href="{% url 'app:batch_restore' page %}">{{ page }}</a></li>
                     {% else %}
                         <li style="display: inline">
-                            <a class="num" name="page" href="{% url 'app:batch_deletion' page %}">{{ page }}</a></li>
+                            <a class="num" name="page" href="{% url 'app:batch_restore' page %}">{{ page }}</a></li>
                     {% endif %}
                 {% endfor %}
 
-                <li style="display: inline"><a class="next" href="{% url 'app:batch_deletion' page=pagetor.num_pages %}">&gt;&gt;</a>
+                <li style="display: inline"><a class="next" href="{% url 'app:batch_restore' page=pagetor.num_pages %}">&gt;&gt;</a>
                 </li>
 
             </ul>
@@ -172,10 +159,10 @@
 
     /*用户-删除*/
     function member_del(obj, id) {
-        layer.confirm('确认要删除吗？', function (index) {
+        layer.confirm('确认要恢复吗？', function (index) {
             //发异步删除数据
             $(obj).parents("tr").remove();
-            layer.msg('已删除!', {icon: 1, time: 1000});
+            layer.msg('已恢复!', {icon: 1, time: 1000});
         });
     }
 
@@ -184,11 +171,10 @@
 
         var data = tableCheck.getData();
 
-        layer.confirm('确认要删除吗？' + data, function (index) {
+        layer.confirm('确认要恢复吗？' + data, function (index) {
             //捉到所有被选中的，发异步进行删除
-            {#window.location='http://127.0.0.1:8000/batch_deletions/?data='+data;#}
-            window.location='http://127.0.0.1:8000/batch_deletions/?page=1&data='+data;
-            layer.msg('删除成功', {icon: 1});
+            window.location='http://127.0.0.1:8000/batch_restore/?page=1&data='+data;
+            layer.msg('恢复成功', {icon: 1});
             $(".layui-form-checked").not('.header').parents('tr').remove();
         });
     }
