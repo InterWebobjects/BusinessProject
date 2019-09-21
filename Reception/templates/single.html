@@ -25,24 +25,28 @@
                         <div class="col-md-5 single-top-left">
                             <div class="flexslider">
                                 <ul class="slides">
-                                    <li data-thumb="/static/images/s-1.jpg">
-                                        <div class="thumb-image"><img src="/static/images/s-1.jpg" data-imagezoom="true"
+                                    <li data-thumb="/static/upload/{{ commodity.picture_1 }}">
+                                        <div class="thumb-image"><img src="/static/upload/{{ commodity.picture_1 }}"
+                                                                      data-imagezoom="true"
                                                                       class="img-responsive" alt=""/></div>
                                     </li>
-                                    <li data-thumb="/static/images/s-2.jpg">
-                                        <div class="thumb-image"><img src="/static/images/s-2.jpg" data-imagezoom="true"
+                                    <li data-thumb="/static/upload/{{ commodity.picture_2 }}">
+                                        <div class="thumb-image"><img src="/static/upload/{{ commodity.picture_2 }}"
+                                                                      data-imagezoom="true"
                                                                       class="img-responsive" alt=""/></div>
                                     </li>
-                                    <li data-thumb="/static/images/s-3.jpg">
-                                        <div class="thumb-image"><img src="/static/images/s-3.jpg" data-imagezoom="true"
+                                    <li data-thumb="/static/upload/{{ commodity.picture_3 }}">
+                                        <div class="thumb-image"><img src="/static/upload/{{ commodity.picture_3 }}"
+                                                                      data-imagezoom="true"
                                                                       class="img-responsive" alt=""/></div>
                                     </li>
                                 </ul>
                             </div>
                             <!-- FlexSlider -->
-                            <script src="/static/js/imagezoom.js"></script>
-                            <script defer src="/static/js/jquery.flexslider.js"></script>
-                            <link rel="stylesheet" href="/static/css/flexslider.css" type="text/css" media="screen"/>
+                            <script src="{% static 'js/imagezoom.js' %}"></script>
+                            <script defer src="{% static 'js/jquery.flexslider.js' %}"></script>
+                            <link rel="stylesheet" href="{% static 'css/flexslider.css' %}" type="text/css"
+                                  media="screen"/>
 
                             <script>
                                 // Can also be used with $(document).ready()
@@ -56,7 +60,7 @@
                         </div>
                         <div class="col-md-7 single-top-right">
                             <div class="single-para simpleCart_shelfItem">
-                                <h2>Lorem Ipsum</h2>
+                                <h2>{{ commodity.cname }}</h2>
                                 <div class="star-on">
                                     <ul class="star-footer">
                                         <li><a href="#"><i> </i></a></li>
@@ -66,20 +70,14 @@
                                         <li><a href="#"><i> </i></a></li>
                                     </ul>
                                     <div class="review">
-                                        <a href="#"> 1 customer review </a>
+                                        <a href="#"> {{ commodity.sid.s_name }} </a>
 
                                     </div>
                                     <div class="clearfix"></div>
                                 </div>
 
-                                <h5 class="item_price">$ 95.00</h5>
-                                <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh
-                                    euismod
-                                    tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim
-                                    veniam,
-                                    quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea
-                                    commodo
-                                    consequat.</p>
+                                <h5 class="item_price">$ {{ commodity.price }}</h5>
+                                <p>{{ commodity.watch }}</p>
                                 <div class="available">
                                     <ul>
                                         <li>Color
@@ -93,19 +91,25 @@
                                             <option>Large</option>
                                             <option>Medium</option>
                                             <option>small</option>
-                                            <option>Large</option>
-                                            <option>small</option>
+
                                         </select></li>
                                         <div class="clearfix"></div>
                                     </ul>
                                 </div>
                                 <ul class="tag-men">
                                     <li><span>TAG</span>
-                                        <span class="women1">: Women,</span></li>
+                                        <span class="women1">:
+                                            {% if commodity.tag == '1' %}
+                                                Men
+                                            {% elif commodity.tag == '0' %}
+                                                Woman
+                                            {% endif %}
+                                            ,
+                                        </span></li>
                                     <li><span>SKU</span>
-                                        <span class="women1">: CK09</span></li>
+                                        <span class="women1">: {{ commodity.sku }}</span></li>
                                 </ul>
-                                <a href="#" class="add-cart item_add">ADD TO CART</a>
+                                <a href="#" class="add-cart item_add" id="addToCart">ADD TO CART</a>
 
                             </div>
                         </div>
@@ -113,154 +117,88 @@
                     </div>
                     <div class="tabs">
                         <ul class="menu_drop">
-                            <li class="item1"><a href="#"><img src="/static/images/arrow.png" alt="">Description</a>
+                            <li class="item1">
+                                <a href="#"><img src="/static/images/arrow.png" alt="">简介</a>
                                 <ul>
-                                    <li class="subitem1"><a href="#">Lorem ipsum dolor sit amet, consectetuer adipiscing
-                                        elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam
-                                        erat
-                                        volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper
-                                        suscipit lobortis nisl ut aliquip ex ea commodo consequat.</a></li>
-                                    <li class="subitem2"><a href="#"> Duis autem vel eum iriure dolor in hendrerit in
-                                        vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla
-                                        facilisis
-                                        at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum
-                                        zzril
-                                        delenit augue duis dolore</a></li>
-                                    <li class="subitem3"><a href="#">Mirum est notare quam littera gothica, quam nunc
-                                        putamus parum claram, anteposuerit litterarum formas humanitatis per seacula
-                                        quarta
-                                        decima et quinta decima. Eodem modo typi, qui nunc nobis videntur parum clari,
-                                        fiant
-                                        sollemnes </a></li>
+                                    <li class="subitem1">
+                                        <a href="#" style="font-size: 16px;color: #8c7b67;">
+                                            {{ commodity.description }}
+                                        </a>
+                                    </li>
                                 </ul>
                             </li>
-                            <li class="item2"><a href="#"><img src="/static/images/arrow.png" alt="">Additional
-                                information</a>
-                                <ul>
-                                    <li class="subitem2"><a href="#"> Duis autem vel eum iriure dolor in hendrerit in
-                                        vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla
-                                        facilisis
-                                        at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum
-                                        zzril
-                                        delenit augue duis dolore</a></li>
-                                    <li class="subitem3"><a href="#">Mirum est notare quam littera gothica, quam nunc
-                                        putamus parum claram, anteposuerit litterarum formas humanitatis per seacula
-                                        quarta
-                                        decima et quinta decima. Eodem modo typi, qui nunc nobis videntur parum clari,
-                                        fiant
-                                        sollemnes </a></li>
-                                </ul>
-                            </li>
-                            <li class="item3"><a href="#"><img src="/static/images/arrow.png" alt="">Reviews (10)</a>
-                                <ul>
-                                    <li class="subitem1"><a href="#">Lorem ipsum dolor sit amet, consectetuer adipiscing
-                                        elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam
-                                        erat
-                                        volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper
-                                        suscipit lobortis nisl ut aliquip ex ea commodo consequat.</a></li>
-                                    <li class="subitem2"><a href="#"> Duis autem vel eum iriure dolor in hendrerit in
-                                        vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla
-                                        facilisis
-                                        at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum
-                                        zzril
-                                        delenit augue duis dolore</a></li>
-                                    <li class="subitem3"><a href="#">Mirum est notare quam littera gothica, quam nunc
-                                        putamus parum claram, anteposuerit litterarum formas humanitatis per seacula
-                                        quarta
-                                        decima et quinta decima. Eodem modo typi, qui nunc nobis videntur parum clari,
-                                        fiant
-                                        sollemnes </a></li>
-                                </ul>
-                            </li>
-                            <li class="item4"><a href="#"><img src="/static/images/arrow.png" alt="">Helpful Links</a>
-                                <ul>
-                                    <li class="subitem2"><a href="#"> Duis autem vel eum iriure dolor in hendrerit in
-                                        vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla
-                                        facilisis
-                                        at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum
-                                        zzril
-                                        delenit augue duis dolore</a></li>
-                                    <li class="subitem3"><a href="#">Mirum est notare quam littera gothica, quam nunc
-                                        putamus parum claram, anteposuerit litterarum formas humanitatis per seacula
-                                        quarta
-                                        decima et quinta decima. Eodem modo typi, qui nunc nobis videntur parum clari,
-                                        fiant
-                                        sollemnes </a></li>
-                                </ul>
-                            </li>
-                            <li class="item5"><a href="#"><img src="/static/images/arrow.png" alt="">Make A Gift</a>
-                                <ul>
-                                    <li class="subitem1"><a href="#">Lorem ipsum dolor sit amet, consectetuer adipiscing
-                                        elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam
-                                        erat
-                                        volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper
-                                        suscipit lobortis nisl ut aliquip ex ea commodo consequat.</a></li>
-                                    <li class="subitem2"><a href="#"> Duis autem vel eum iriure dolor in hendrerit in
-                                        vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla
-                                        facilisis
-                                        at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum
-                                        zzril
-                                        delenit augue duis dolore</a></li>
-                                    <li class="subitem3"><a href="#">Mirum est notare quam littera gothica, quam nunc
-                                        putamus parum claram, anteposuerit litterarum formas humanitatis per seacula
-                                        quarta
-                                        decima et quinta decima. Eodem modo typi, qui nunc nobis videntur parum clari,
-                                        fiant
-                                        sollemnes </a></li>
-                                </ul>
-                            </li>
+                            {% if commodity.plate %}
+                                <li class="item2"><a href="#"><img src="/static/images/arrow.png" alt="">表盘</a>
+                                    <ul>
+                                        <li class="subitem1">
+                                            <a href="#" style="font-size: 16px;color: #8c7b67;">
+                                                {{ commodity.plate }}
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            {% endif %}
+                            {% if commodity.case %}
+                                <li class="item3"><a href="#"><img src="/static/images/arrow.png" alt="">表壳</a>
+                                    <ul>
+                                        <li class="subitem1">
+                                            <a href="#" style="font-size: 16px;color: #8c7b67;">
+                                                {{ commodity.case }}
+                                            </a>
+                                        </li>
+
+                                    </ul>
+                                </li>
+                            {% endif %}
+                            {% if commodity.gem %}
+                                <li class="item4"><a href="#"><img src="/static/images/arrow.png" alt="">宝石镶嵌</a>
+                                    <ul>
+                                        <li class="subitem2">
+                                            <a href="#" style="font-size: 16px;color: #8c7b67;">
+                                                {{ commodity.gem }}
+                                            </a>
+                                        </li>
+
+                                    </ul>
+                                </li>
+                            {% endif %}
+                            {% if commodity.strap %}
+                                <li class="item5"><a href="#"><img src="/static/images/arrow.png" alt="">表带</a>
+                                    <ul>
+                                        <li class="subitem1">
+                                            <a href="#" style="font-size: 16px;color: #8c7b67;">
+                                                {{ commodity.strap }}
+                                            </a>
+                                        </li>
+
+                                    </ul>
+                                </li>
+                            {% endif %}
                         </ul>
                     </div>
                     <div class="latestproducts">
                         <div class="product-one">
-                            <div class="col-md-4 product-left p-left">
-                                <div class="product-main simpleCart_shelfItem">
-                                    <a href="single.html" class="mask"><img class="img-responsive zoom-img"
-                                                                            src="/static/images/p-1.png" alt=""/></a>
-                                    <div class="product-bottom">
-                                        <h3>Smart Watches</h3>
-                                        <p>Explore Now</p>
-                                        <h4><a class="item_add" href="#"><i></i></a> <span
-                                                class=" item_price">$ 329</span>
-                                        </h4>
-                                    </div>
-                                    <div class="srch">
-                                        <span>-50%</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4 product-left p-left">
-                                <div class="product-main simpleCart_shelfItem">
-                                    <a href="single.html" class="mask"><img class="img-responsive zoom-img"
-                                                                            src="/static/images/p-2.png" alt=""/></a>
-                                    <div class="product-bottom">
-                                        <h3>Smart Watches</h3>
-                                        <p>Explore Now</p>
-                                        <h4><a class="item_add" href="#"><i></i></a> <span
-                                                class=" item_price">$ 329</span>
-                                        </h4>
-                                    </div>
-                                    <div class="srch">
-                                        <span>-50%</span>
+                            {% for recommend in recommendList %}
+                                <div class="col-md-4 product-left p-left">
+                                    <div class="product-main simpleCart_shelfItem">
+                                        <a href="{% url 'app:single' cid=recommend.id %}" class="mask">
+                                            <img class="img-responsive zoom-img"
+                                                 src="/static/upload/{{ recommend.picture_1 }}" alt=""/>
+                                        </a>
+                                        <div class="product-bottom">
+                                            <h3>{{ recommend.cname }}</h3>
+                                            <p>{{ recommend.sid.s_name }}</p>
+                                            <h4><a class="item_add" href="{% url 'app:single' cid=recommend.id %}">
+                                                <i></i></a>
+                                                <span class=" item_price">$ {{ recommend.price }}</span>
+                                            </h4>
+                                        </div>
+                                        <div class="srch">
+                                            <span>-50%</span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-md-4 product-left p-left">
-                                <div class="product-main simpleCart_shelfItem">
-                                    <a href="single.html" class="mask"><img class="img-responsive zoom-img"
-                                                                            src="/static/images/p-3.png" alt=""/></a>
-                                    <div class="product-bottom">
-                                        <h3>Smart Watches</h3>
-                                        <p>Explore Now</p>
-                                        <h4><a class="item_add" href="#"><i></i></a> <span
-                                                class=" item_price">$ 329</span>
-                                        </h4>
-                                    </div>
-                                    <div class="srch">
-                                        <span>-50%</span>
-                                    </div>
-                                </div>
-                            </div>
+                            {% endfor %}
                             <div class="clearfix"></div>
                         </div>
                     </div>
@@ -271,40 +209,29 @@
                             <h4>Catogories</h4>
                             <div class="row1 scroll-pane">
                                 <div class="col col-4">
-                                    <label class="checkbox"><input type="checkbox" name="checkbox" checked=""><i></i>All
-                                        Accessories</label>
-                                </div>
-                                <div class="col col-4">
-                                    <label class="checkbox"><input type="checkbox" name="checkbox"><i></i>Women
+                                    <label class="checkbox"><input type="checkbox" name="checkbox"
+                                                                   {% if commodity.tag == '1' %}checked{% endif %}><i></i>Men
                                         Watches</label>
-                                    <label class="checkbox"><input type="checkbox" name="checkbox"><i></i>Kids
+                                    <label class="checkbox"><input type="checkbox" name="checkbox"
+                                                                   {% if commodity.tag == '0' %}checked{% endif %}><i></i>Women
                                         Watches</label>
-                                    <label class="checkbox"><input type="checkbox" name="checkbox"><i></i>Men
+                                    <label class="checkbox"><input type="checkbox" name="checkbox"
+                                                                   {% if commodity.sid > 7 %}checked{% endif %}><i></i>Classic
                                         Watches</label>
                                 </div>
                             </div>
                         </section>
                         <section class="sky-form">
-                            <h4>Brand</h4>
+                            <h4>Series</h4>
                             <div class="row1 row2 scroll-pane">
                                 <div class="col col-4">
-                                    <label class="checkbox"><input type="checkbox" name="checkbox" checked=""><i></i>kurtas</label>
-                                </div>
-                                <div class="col col-4">
-                                    <label class="checkbox"><input type="checkbox" name="checkbox"><i></i>Sonata</label>
-                                    <label class="checkbox"><input type="checkbox" name="checkbox"><i></i>Titan</label>
-                                    <label class="checkbox"><input type="checkbox" name="checkbox"><i></i>Casio</label>
-                                    <label class="checkbox"><input type="checkbox" name="checkbox"><i></i>Omax</label>
-                                    <label class="checkbox"><input type="checkbox" name="checkbox"><i></i>shree</label>
-                                    <label class="checkbox"><input type="checkbox"
-                                                                   name="checkbox"><i></i>Fastrack</label>
-                                    <label class="checkbox"><input type="checkbox" name="checkbox"><i></i>Sports</label>
-                                    <label class="checkbox"><input type="checkbox" name="checkbox"><i></i>Fossil</label>
-                                    <label class="checkbox"><input type="checkbox" name="checkbox"><i></i>Maxima</label>
-                                    <label class="checkbox"><input type="checkbox" name="checkbox"><i></i>Yepme</label>
-                                    <label class="checkbox"><input type="checkbox"
-                                                                   name="checkbox"><i></i>Citizen</label>
-                                    <label class="checkbox"><input type="checkbox" name="checkbox"><i></i>Diesel</label>
+                                    {% for style in styles.3 %}
+                                        <label class="checkbox">
+                                            <input type="checkbox" name="checkbox"
+                                                   {% if style.sid == commodity.sid.sid %}checked{% endif %}>
+                                            <i></i>{{ style.s_name }}
+                                        </label>
+                                    {% endfor %}
                                 </div>
                             </div>
                         </section>
@@ -339,13 +266,18 @@
                                 <div class="col col-4">
                                     <label class="radio"><input type="radio" name="radio" checked=""><i></i>60 % and
                                         above</label>
-                                    <label class="radio"><input type="radio" name="radio"><i></i>50 % and above</label>
-                                    <label class="radio"><input type="radio" name="radio"><i></i>40 % and above</label>
+                                    <label class="radio"><input type="radio" name="radio"><i></i>50 % and
+                                        above</label>
+                                    <label class="radio"><input type="radio" name="radio"><i></i>40 % and
+                                        above</label>
                                 </div>
                                 <div class="col col-4">
-                                    <label class="radio"><input type="radio" name="radio"><i></i>30 % and above</label>
-                                    <label class="radio"><input type="radio" name="radio"><i></i>20 % and above</label>
-                                    <label class="radio"><input type="radio" name="radio"><i></i>10 % and above</label>
+                                    <label class="radio"><input type="radio" name="radio"><i></i>30 % and
+                                        above</label>
+                                    <label class="radio"><input type="radio" name="radio"><i></i>20 % and
+                                        above</label>
+                                    <label class="radio"><input type="radio" name="radio"><i></i>10 % and
+                                        above</label>
                                 </div>
                             </div>
                         </section>
@@ -356,5 +288,36 @@
         </div>
     </div>
     <!--end-single-->
+    <script type="text/javascript">
+        $(function () {
+
+            var menu_ul = $('.menu_drop > li > ul'),
+                menu_a = $('.menu_drop > li > a');
+
+            menu_ul.hide();
+
+            menu_a.click(function (e) {
+                e.preventDefault();
+                if (!$(this).hasClass('active')) {
+                    menu_a.removeClass('active');
+                    menu_ul.filter(':visible').slideUp('normal');
+                    $(this).addClass('active').next().stop(true, true).slideDown('normal');
+                } else {
+                    $(this).removeClass('active');
+                    $(this).next().stop(true, true).slideUp('normal');
+                }
+            });
+
+        });
+    </script>
+    <script>
+        $("#addToCart").click(function () {
+            var id = {{ commodity.id }};
+            $.post("/cart/1/?action=addToCart", {'data': id,}, function (params) {
+                alert(params.msg);
+            })
+        });
+
+    </script>
 {% endblock %}
 
