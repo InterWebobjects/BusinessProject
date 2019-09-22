@@ -124,7 +124,7 @@
                                             refund
                                         </a>
                                     {% else %}
-                                        <a href="{% url 'app:sellteaccounts' %}" class="add-cart item_add"
+                                        <a href="{% url 'app:repay' %}?oid={{ order.id }}" class="add-cart item_add"
                                            id="addToCart"
                                            style="width: 170px;text-align: center;">
                                             pay

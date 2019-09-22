@@ -1,16 +1,18 @@
+from alipay import AliPay
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
-from django.core.mail import send_mail
+from django.core.mail import send_mail, EmailMultiAlternatives
 from django.db.models import Q
 from django.shortcuts import render, redirect
 
 # Create your views here.
+from django.template import loader, Context
 from django.urls import reverse
 
 from App.models import *
 from cart.cart import Cart
 
-from Reception.settings import EMAIL_HOST_USER
+from Reception.settings import DEFAULT_FROM_EMAIL, APP_PRIVATE_KEY, ALIPAY_PUBLIC_KEY, ALI_APP_ID
 
 
 def styleList(request):
@@ -133,7 +135,58 @@ def pay(request):
             clist += c
         newOrder.clist = clist
         newOrder.save()
+
+        alipay = AliPay(
+            appid=ALI_APP_ID,
+            app_notify_url=None,
+            app_private_key_string=APP_PRIVATE_KEY,
+            alipay_public_key_string=ALIPAY_PUBLIC_KEY,
+            sign_type="RSA2",
+            debug=False
+        )
+        order_string = alipay.api_alipay_trade_page_pay(
+            out_trade_no="{}".format(newOrder.number),
+            total_amount=newOrder.money,
+            subject=newOrder.number,
+            return_url="http://127.0.0.1/finish/?id=" + str(newOrder.id),
+            notify_url="http://127.0.0.1/orders/",
+
+        )
+        net = "https://openapi.alipaydev.com/gateway.do?{}".format(order_string)
+        return redirect(net)
+
+    return redirect(reverse('app:index'))
+
+
+def finish(request):
+    oid = request.GET.get('id')
+    if oid:
+        order_pay = Order.objects.get(id=int(oid))
+        order_pay.pay_time = datetime.now()
+        order_pay.save()
     return redirect(reverse('app:emptyitems'))
+
+
+def repay(request):
+    newOrder = Order.objects.get(id=request.GET.get('oid'))
+    alipay = AliPay(
+        appid=ALI_APP_ID,
+        app_notify_url=None,
+        app_private_key_string=APP_PRIVATE_KEY,
+        alipay_public_key_string=ALIPAY_PUBLIC_KEY,
+        sign_type="RSA2",
+        debug=False
+    )
+    order_string = alipay.api_alipay_trade_page_pay(
+        out_trade_no="{}".format(newOrder.number),
+        total_amount=newOrder.money,
+        subject=newOrder.number,
+        return_url="http://49.234.99.134/finish/?id=" + str(newOrder.id),
+        notify_url="http://49.234.99.134/orders/",
+
+    )
+    net = "https://openapi.alipaydev.com/gateway.do?{}".format(order_string)
+    return redirect(net)
 
 
 @login_required
@@ -154,19 +207,16 @@ def orders(request):
 
 def contact(request):
     if request.method == 'POST':
-        name = request.POST.get('name')
-        phone = request.POST.get('phone')
-        email = request.POST.get('email')
-        message = request.POST.get('message')
-        print('send')
-        send_mail(
-            'From:' + name + '<' + email + '>',
-            message,
-            EMAIL_HOST_USER,
-            ['kornchn@outlook.com'],
-            fail_silently=False
-        )
-        print('finish')
+        context = {
+            'name': request.POST.get('name'),
+            'phone': request.POST.get('phone'),
+            'email': request.POST.get('email'),
+            'message': request.POST.get('message'),
+        }
+        html_content = loader.get_template('mail.html').render(context)
+        msg = EmailMultiAlternatives('Customer feedback', html_content, DEFAULT_FROM_EMAIL, ['kornchn@outlook.com'])
+        msg.attach_alternative(html_content, "text/html")
+        msg.send()
     styles = styleList(request)
     return render(request, 'contact.html', locals())
 
@@ -177,3 +227,38 @@ def confirm(request):
     order_confirm.receive_time = datetime.now()
     order_confirm.save()
     return redirect(reverse('app:orders'))
+
+
+@login_required
+def newpassword(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        old_password = request.POST.get('old_password')
+        new_password = request.POST.get('new_password')
+        re_password = request.POST.get('re_password')
+        print(old_password, new_password, re_password)
+        user = User.check_login(email=email, password=old_password)
+        if user and new_password == re_password:
+            user.password = new_password
+            user.save()
+            return redirect(reverse('app:account'))
+    styles = styleList(request)
+    return render(request, 'password.html', locals())
+
+
+@login_required
+def info(request):
+    if request.method == 'POST':
+        user_info = User.objects.get(uid=request.POST.get('uid'))
+        if request.POST.get('first_name'):
+            user_info.first_name = request.POST.get('first_name')
+        if request.POST.get('last_name'):
+            user_info.last_name = request.POST.get('last_name')
+        if request.POST.get('mobile'):
+            user_info.mobile = request.POST.get('mobile')
+        user_info.address = request.POST.get('address')
+        user_info.gender = request.POST.get('gender')
+        user_info.save()
+    user = User.objects.get(uid=request.user.uid)
+    styles = styleList(request)
+    return render(request, 'info.html', locals())

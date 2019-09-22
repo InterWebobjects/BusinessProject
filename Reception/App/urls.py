@@ -20,12 +20,17 @@ urlpatterns = [
     url(r'^emptyitems/$', views.empty_from_cart, name='emptyitems'),
 
     url(r'^sellteaccounts/$', views.sellteaccounts, name='sellteaccounts'),
-    url(r'pay', views.pay, name='pay'),
+    url(r'^pay/$', views.pay, name='pay'),
+    url(r'^finish/$', views.finish, name='finish'),
+    url(r'^repay/$', views.repay, name='repay'),
 
     url(r'^orders/$', views.orders, name='orders'),
     url(r'^contact/$', views.contact, name='contact'),
 
     url(r'^confirm/$', views.confirm, name='confirm'),
+
+    url(r'^password/$', views.newpassword, name='password'),
+    url(r'^info/$', views.info, name='info'),
 
     url(r'^user/(?P<pk>\d+)/$', mine.UserAPIView.as_view(), name='user'),
 

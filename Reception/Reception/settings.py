@@ -134,9 +134,19 @@ EMAIL_HOST = 'smtp.qq.com'
 # 设置端口号，为数字
 EMAIL_PORT = 25
 # 设置发件人邮箱
-EMAIL_HOST_USER = '490211968@qq.com'
+EMAIL_HOST_USER = 'kornchn@foxmail.com'
 # 设置发件人 授权码
 EMAIL_HOST_PASSWORD = 'jnfzxxtetkzwbjgi'
 # 设置是否启用安全链接
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
+DEFAULT_FROM_EMAIL = 'Customer<kornchn@foxmail.com>'
+
+# 支付
+ALIPAY_PUBLIC_KEY = open(os.path.join(BASE_DIR, 'alipay/alipay_public.txt')).read()
+
+APP_PRIVATE_KEY = open(os.path.join(BASE_DIR, 'alipay/app_private_key.txt')).read()
+
+APP_PUBLIC_KEY = open(os.path.join(BASE_DIR, 'alipay/app_public.txt')).read()
+
+ALI_APP_ID = '2016101200668794'
