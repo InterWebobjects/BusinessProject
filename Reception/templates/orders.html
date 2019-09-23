@@ -53,15 +53,15 @@
                                 <li><span>Number:{{ o.0.number }}</span></li>
                                 <li>
                                     <span>Status:
-                                    {% if o.0.receive_time %}
-                                        Finished
-                                    {% elif o.0.send_time %}
-                                        Transporting
-                                    {% elif o.0.pay_time %}
-                                        To be delivered
-                                    {% else %}
-                                        Unpaid
-                                    {% endif %}
+                                        {% if o.0.receive_time %}
+                                            Finished
+                                        {% elif o.0.send_time %}
+                                            Transporting
+                                        {% elif o.0.pay_time %}
+                                            To be delivered
+                                        {% else %}
+                                            Unpaid
+                                        {% endif %}
                                     </span>
                                 </li>
                                 <li><span>To:{{ o.0.receiver }}</span></li>
@@ -106,10 +106,10 @@
                                 </li>
                                 <li>
                                     {% if o.0.receive_time %}
-                                        <a href="{% url 'app:sellteaccounts' %}" class="add-cart item_add"
+                                        <a href="{% url 'app:deleteorder' %}?id={{ o.0.id }}" class="add-cart item_add"
                                            id="addToCart"
                                            style="width: 170px;text-align: center;">
-                                            Goods back
+                                            Delete
                                         </a>
                                     {% elif o.0.send_time %}
                                         <a href="{% url 'app:confirm' %}?id={{ o.0.id }}" class="add-cart item_add"
@@ -118,10 +118,10 @@
                                             Confirm receipt
                                         </a>
                                     {% elif o.0.pay_time %}
-                                        <a href="{% url 'app:sellteaccounts' %}" class="add-cart item_add"
+                                        <a href="" class="add-cart item_add"
                                            id="addToCart"
                                            style="width: 170px;text-align: center;">
-                                            refund
+                                            Urge
                                         </a>
                                     {% else %}
                                         <a href="{% url 'app:repay' %}?oid={{ order.id }}" class="add-cart item_add"

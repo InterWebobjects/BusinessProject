@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Reset password</title>
+</head>
+<body>
+<h3>Dear:{{ user_reset.first_name }}.{{ user_reset.last_name }}</h3>
+
+<h3>Please click <a href="http://49.234.99.134/reset_password/?uid={{ user_reset.uid }}">RESET PASSWORD</a> to reset your password</h3>
+
+</body>
+</html>

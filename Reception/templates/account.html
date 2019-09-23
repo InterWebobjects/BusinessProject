@@ -30,7 +30,7 @@
                             <input placeholder="Email" name="email" type="text" tabindex="3" required>
                             <input placeholder="Password" name="password" type="password" tabindex="4" required>
                             <div class="address">
-                                <a class="forgot" href="#">Forgot Your Password?</a>
+                                <a class="forgot" href="{% url 'app:reset' %}">Forgot Your Password?</a>
                                 <input type="submit" value="Login">
                             </div>
                         </form>

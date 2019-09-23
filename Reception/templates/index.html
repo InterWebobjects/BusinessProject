@@ -164,9 +164,12 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                     </div>
                     <div class="col-md-3 header-right">
                         <div class="search-bar">
-                            <input type="text" value="Search" onfocus="this.value = '';"
-                                   onblur="if (this.value == '') {this.value = 'Search';}">
-                            <input type="submit" value="">
+                            <form method="post" action="{% url 'app:search' %}">
+                                {% csrf_token %}
+                                <input type="text" value="Search" name="keyword" onfocus="this.value = '';"
+                                       onblur="if (this.value == '') {this.value = 'Search';}">
+                                <input type="submit" value="">
+                            </form>
                         </div>
                     </div>
                     <div class="clearfix"></div>
@@ -267,7 +270,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                                 </h4>
                             </div>
                             <div class="srch">
-                                <span>-50%</span>
+                                <span>New</span>
                             </div>
                         </div>
                     </div>
@@ -338,11 +341,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
             <div class="container">
                 <div class="footer-top">
                     <div class="col-md-6 footer-left">
-                        <form>
-                            <input type="text" value="Enter Your Email" onfocus="this.value = '';"
-                                   onblur="if (this.value == '') {this.value = 'Enter Your Email';}">
-                            <input type="submit" value="Subscribe">
-                        </form>
+
                     </div>
                     <div class="col-md-6 footer-right">
                         <p>Copyright &copy; 2015.Company name All rights reserved.<a target="_blank"

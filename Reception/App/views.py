@@ -27,7 +27,7 @@ def styleList(request):
 def index(request):
     styles = styleList(request)
     aboutList = Commodity.objects.order_by('-id')[0:3]
-    productList = Commodity.objects.order_by('-id')[3:11]
+    productList = Commodity.objects.order_by('-id')[0:8]
 
     return render(request, 'index.html', locals())
 
@@ -148,8 +148,8 @@ def pay(request):
             out_trade_no="{}".format(newOrder.number),
             total_amount=newOrder.money,
             subject=newOrder.number,
-            return_url="http://127.0.0.1/finish/?id=" + str(newOrder.id),
-            notify_url="http://127.0.0.1/orders/",
+            return_url="http://49.234.99.134/finish/?id=" + str(newOrder.id),
+            notify_url="http://49.234.99.134/orders/",
 
         )
         net = "https://openapi.alipaydev.com/gateway.do?{}".format(order_string)
@@ -191,7 +191,7 @@ def repay(request):
 
 @login_required
 def orders(request):
-    orders = Order.objects.filter(uid=request.user.uid).order_by('-id')
+    orders = Order.objects.filter(uid=request.user.uid, is_delete=0).order_by('-id')
     olist = []
     for order in orders:
         item_list = order.clist.split(',')[:-1]
@@ -262,3 +262,49 @@ def info(request):
     user = User.objects.get(uid=request.user.uid)
     styles = styleList(request)
     return render(request, 'info.html', locals())
+
+
+def search(request):
+    if request.method == 'POST':
+        keyword = request.POST.get('keyword')
+        productList = Commodity.objects.filter(sku__contains=keyword)
+    styles = styleList(request)
+    return render(request, 'products.html', locals())
+
+
+def reset(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        user_reset = User.objects.filter(email=email).first()
+        if user_reset:
+            html_content = loader.get_template('resetmail.html').render({'user_reset': user_reset})
+            msg = EmailMultiAlternatives('Reset Password', html_content, DEFAULT_FROM_EMAIL, [user_reset.email])
+            msg.attach_alternative(html_content, "text/html")
+            msg.send()
+    styles = styleList(request)
+    return render(request, 'reset.html', locals())
+
+
+def reset_password(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        user = User.objects.filter(email=email).first()
+        if request.POST.get('new_password') == request.POST.get('re_password'):
+            user.password = request.POST.get('new_password')
+            user.save()
+            return redirect(reverse('app:account'))
+        else:
+            return render(request, 'reset_password.html', locals())
+    else:
+        uid = request.GET.get('uid')
+        user = User.objects.get(uid=uid)
+    styles = styleList(request)
+    return render(request, 'reset_password.html', locals())
+
+
+def deleteorder(request):
+    oid = request.GET.get('id')
+    order = Order.objects.get(id=oid)
+    order.is_delete = 1
+    order.save()
+    return redirect(reverse('app:orders'))

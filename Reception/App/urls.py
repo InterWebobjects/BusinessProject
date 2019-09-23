@@ -25,12 +25,18 @@ urlpatterns = [
     url(r'^repay/$', views.repay, name='repay'),
 
     url(r'^orders/$', views.orders, name='orders'),
+    url(r'^deleteorder/$', views.deleteorder, name='deleteorder'),
+
     url(r'^contact/$', views.contact, name='contact'),
 
     url(r'^confirm/$', views.confirm, name='confirm'),
 
     url(r'^password/$', views.newpassword, name='password'),
     url(r'^info/$', views.info, name='info'),
+    url(r'^reset/$', views.reset, name='reset'),
+    url(r'^reset_password/$',views.reset_password,name='reset_password'),
+
+    url(r'^search/$', views.search, name='search'),
 
     url(r'^user/(?P<pk>\d+)/$', mine.UserAPIView.as_view(), name='user'),
 
