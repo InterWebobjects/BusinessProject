@@ -2,7 +2,7 @@ amqp==2.5.1
 anyjson==0.3.3
 Babel==2.7.0
 billiard==3.6.1.0
-celery==4.3.0
+celery==5.2.2
 celery-with-redis==3.0
 Click==7.0
 Django==1.11.16
